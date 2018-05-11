@@ -4,7 +4,7 @@ SHELL=/bin/bash
 test: .venv/.complete dynamodb_restart
 	$(info # Make sure zappa is installed)
 	source .venv/bin/activate && \
-		DYNAMODB_ENDPOINT="http://localhost:8000" pytest --cov-fail-under 100
+		DYNAMODB_ENDPOINT="http://localhost:8000" pytest --cov=collar_metrics --cov-fail-under 100 --cov-report term-missing
 
 .venv/.complete: .venv/.updated_pip requirements.txt
 	source .venv/bin/activate && pip install -r requirements.txt

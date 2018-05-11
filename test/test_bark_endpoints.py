@@ -1,6 +1,7 @@
 import pytest
 import flask
 import json
+from collar_metrics import barks_table
 import collar_metrics
 
 
@@ -9,9 +10,16 @@ def jsonapi(response_data):
 
 
 @pytest.fixture(scope="module")
-def app():
+def barks():
+    b = barks_table.BarksTable()
+    b.gracefully_create_table()
+    return b
+
+
+@pytest.fixture(scope="module")
+def app(barks):
     a = flask.Flask('collar_metrics')
-    collar_metrics.bootstrap(a, [])
+    collar_metrics.bootstrap(a, barks)
     return a
 
 
@@ -32,7 +40,7 @@ def test_get_barks_empty(api_client):
 
 
 def test_new_barks_are_preserved(api_client):
-    bark_event = {"type": "barks", "attributes": {"volume": 5, "timestamp": "2018-01-01"}}
+    bark_event = {"type": "barks", "attributes": {"volume": '5', "timestamp": "2018-01-01"}}
     api_client.post(
         "/collar/1/barks/new",
         data=json.dumps(dict(data=[bark_event])),
