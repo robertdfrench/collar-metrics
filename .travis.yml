@@ -1,5 +1,7 @@
 language: python
 python:
   - "3.6"
+install:
+  - mv test/fixtures/.aws ~/.aws
 script:
   - make test
