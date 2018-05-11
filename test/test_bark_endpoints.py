@@ -4,6 +4,10 @@ import json
 import collar_metrics
 
 
+def jsonapi(response_data):
+    return json.loads(str(response_data, 'utf-8'))
+
+
 @pytest.fixture(scope="module")
 def app():
     a = flask.Flask('collar_metrics')
@@ -27,14 +31,12 @@ def test_get_barks_empty(api_client):
     assert not jsonapi(response.data)['data']
 
 
-def test_posting_adds_a_bark(api_client):
+def test_new_barks_are_preserved(api_client):
+    bark_event = {"type": "barks", "attributes": {"volume": 5, "timestamp": "2018-01-01"}}
     api_client.post(
         "/collar/1/barks/new",
-        data=json.dumps(dict(blah="crap")),
+        data=json.dumps(dict(data=[bark_event])),
         content_type="application/json"
     )
     response = api_client.get("/collar/1/barks")
-    assert len(jsonapi(response.data)['data']) == 1
-
-def jsonapi(response_data):
-    return json.loads(str(response_data, 'utf-8'))
+    assert jsonapi(response.data)['data'][-1] == bark_event
