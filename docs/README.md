@@ -4,6 +4,9 @@ messages will use `application/vnd.api+json` mime type. For the sake of energy
 efficiency, devices may choose to queue events locally and deliver them to this
 service in batches.
 
+All API requests require an `:id` parameter, which is the globally unique
+device id of the collar. 
+
 ## Bark Events
 
 ### POST /collar/:id/barks/new
