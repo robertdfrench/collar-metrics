@@ -11,7 +11,7 @@ def jsonapi(response_data):
 @pytest.fixture(scope="module")
 def app():
     a = flask.Flask('collar_metrics')
-    collar_metrics.bootstrap(a)
+    collar_metrics.bootstrap(a, [])
     return a
 
 

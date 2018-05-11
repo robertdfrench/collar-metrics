@@ -1,8 +1,7 @@
 import flask
 
-def bootstrap(app):
 
-    barks = []
+def bootstrap(app, barks):
 
     @app.route("/collar/1/barks", methods=['GET'])
     def list_barks():
