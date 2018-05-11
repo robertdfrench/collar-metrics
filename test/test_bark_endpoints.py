@@ -48,3 +48,14 @@ def test_new_barks_are_preserved(api_client):
     )
     response = api_client.get("/collar/1/barks")
     assert jsonapi(response.data)['data'][-1] == bark_event
+
+
+def test_barks_are_separated_by_collar(api_client):
+    bark_event = {"type": "barks", "attributes": {"volume": '5', "timestamp": "2018-01-01"}}
+    api_client.post(
+        "/collar/1/barks/new",
+        data=json.dumps(dict(data=[bark_event])),
+        content_type="application/json"
+    )
+    response = api_client.get("/collar/2/barks")
+    assert not jsonapi(response.data)['data']
