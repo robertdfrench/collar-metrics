@@ -104,3 +104,6 @@ ENV/
 
 # Dynamodb
 *.db
+
+# Zappa
+collar-metrics-*-template-*.json
