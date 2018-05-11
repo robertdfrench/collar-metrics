@@ -18,35 +18,50 @@ class BarksTable(object):
             self._create_table()
 
     def _table_exists(self):
-        return self.table_name in self.dynamodb.list_tables(
-            ExclusiveStartTableName=self.table_name,
-            Limit=1
-        )['TableNames']
+        table_names = self.dynamodb.list_tables()['TableNames']
+        return self.table_name in table_names
 
     def _create_table(self):
         self.dynamodb.create_table(
             TableName=self.table_name,
-            AttributeDefinitions=[{"AttributeName": "collarid", "AttributeType": "S"}],
-            KeySchema=[{"AttributeName": "collarid", "KeyType": "HASH"}],
+            AttributeDefinitions=[
+                {"AttributeName": "collarid", "AttributeType": "S"},
+                {"AttributeName": "timestamp", "AttributeType": "S"}
+            ],
+            KeySchema=[
+                {"AttributeName": "collarid", "KeyType": "HASH"},
+                {"AttributeName": "timestamp", "KeyType": "RANGE"},
+            ],
             ProvisionedThroughput={
                 'ReadCapacityUnits': 5,
                 'WriteCapacityUnits': 5
             }
         )
 
-    @property
-    def _table(self):
-        return self.dynamodb.Table(self.table_name)
-
     def by_collar(self, collar_id):
-        return self.dynamodb.query(
+        bark_records = self.dynamodb.query(
             TableName=self.table_name,
             KeyConditionExpression="collarid = :collar",
             ExpressionAttributeValues={":collar": {"S": collar_id}}
         )['Items']
+        return [format_for_api(x) for x in bark_records]
 
     def add(self, **kwargs):
         self.dynamodb.put_item(
             TableName=self.table_name,
-            Item={"collarid": {"S": kwargs['collar']}}
+            Item={
+                "collarid": {"S": kwargs['collar']},
+                "volume": {"N": str(kwargs['volume'])},
+                "timestamp": {"S": kwargs['timestamp']}
+            }
         )
+
+
+def format_for_api(bark_record):
+    return {
+        "type": "barks",
+        "attributes": {
+            "volume": bark_record['volume']['N'],
+            "timestamp": bark_record['timestamp']['S']
+        }
+    }
