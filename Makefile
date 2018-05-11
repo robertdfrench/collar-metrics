@@ -15,3 +15,6 @@ test: .venv/.complete
 .venv/.new:
 	python3.6 -m venv .venv
 	@touch $@
+
+uuid:
+	@python3 -c "import uuid; print(uuid.uuid4())"
