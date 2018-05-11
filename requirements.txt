@@ -1,3 +1,5 @@
 flask
 zappa
 boto3
+pytest
+pytest-cov

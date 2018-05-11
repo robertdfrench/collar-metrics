@@ -1,8 +1,9 @@
 SHELL=/bin/bash
+.PHONY: test
 
 test: .venv/.complete
 	$(info # Make sure zappa is installed)
-	source .venv/bin/activate && which zappa
+	source .venv/bin/activate && pytest --cov-fail-under 100
 
 .venv/.complete: .venv/.updated_pip requirements.txt
 	source .venv/bin/activate && pip install -r requirements.txt
