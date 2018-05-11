@@ -4,8 +4,7 @@ import pytest
 @pytest.fixture
 def client():
     return boto3.client('dynamodb',
-        endpoint_url='http://localhost:8000',
-        region_name='us-east-1'
+        endpoint_url='http://localhost:8000'
     )
 
 
