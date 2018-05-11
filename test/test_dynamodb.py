@@ -11,7 +11,7 @@ def client():
 
 def test_can_create_table(client):
     client.create_table(
-        TableName="collar-metrics-barks",
+        TableName="collar-metrics-barks-test",
         AttributeDefinitions=[{"AttributeName": "id", "AttributeType": "S"}],
         KeySchema=[{"AttributeName": "id", "KeyType": "HASH"}],
 	ProvisionedThroughput={
