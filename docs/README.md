@@ -1,4 +1,5 @@
 # Collar Metrics Service API
+Adheres to [JSON API](http://jsonapi.org/) specification.
 
 ## Bark Events
 
