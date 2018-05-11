@@ -37,11 +37,12 @@ vendor/dynamodb.tar.gz:
 
 clean:
 	rm -rf vendor/ .venv/
+	rm -f collar-metrics-*-template-*.json
 
-deploy: .venv/.complete zappa_settings.json
+deploy: .venv/.complete zappa_settings.json migrate
 	source .venv/bin/activate && zappa update production
 
-trace: .venv/.complete zappa_settings.json
+tail: .venv/.complete zappa_settings.json
 	source .venv/bin/activate && zappa tail production
 
 migrate: .venv/.complete zappa_settings.json
@@ -49,4 +50,7 @@ migrate: .venv/.complete zappa_settings.json
 
 zappa_settings.json: .venv/.complete
 	zappa init
-	$(info you will now need to run 'zappa deploy production' once by hand)
+	$(error you will now need to run 'make setup' by hand and hammer out your IAM permissions until they are loose enough)
+
+setup: .venv/.complete zappa_settings.json
+	source .venv/bin/activate && zappa deploy production
