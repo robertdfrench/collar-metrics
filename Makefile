@@ -46,3 +46,7 @@ trace: .venv/.complete zappa_settings.json
 
 migrate: .venv/.complete zappa_settings.json
 	source .venv/bin/activate && python migrate.py
+
+zappa_settings.json: .venv/.complete
+	zappa init
+	$(info you will now need to run 'zappa deploy production' once by hand)
